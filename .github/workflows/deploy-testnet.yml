@@ -1,0 +1,13 @@
+name: Deploy Components to Testnet
+on:
+  push:
+    branches: [master]
+jobs:
+  deploy-testnet:
+    uses: FroVolod/bos-cli-rs/.github/workflows/deploy-testnet.yml@master
+    with:
+      deploy-account-address: ${{ secrets.TESTNET_ADDRESS }}
+      signer-account-address: ${{ secrets.TESTNET_ADDRESS }}
+      signer-public-key: ${{ secrets.TESTNET_PUBLIC_KEY }}
+    secrets:
+      SIGNER_PRIVATE_KEY: ${{ secrets.TESTNET_PRIVATE_KEY }}
