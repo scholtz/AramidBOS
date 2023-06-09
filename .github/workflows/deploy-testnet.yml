@@ -6,8 +6,8 @@ jobs:
   deploy-testnet:
     uses: scholtz/bos-cli-rs/.github/workflows/deploy-testnet.yml@master
     with:
-      deploy-account-address: ${{ secrets.TESTNET_ADDRESS }}
-      signer-account-address: ${{ secrets.TESTNET_ADDRESS }}
-      signer-public-key: ${{ secrets.TESTNET_PUBLIC_KEY }}
+      deploy-account-address: 'scholtz.testnet'
+      signer-account-address: 'scholtz.testnet'
+      signer-public-key: 'ed25519:5JwQCVJkfBEiCayuE7HKhqsCPyYKT6pBBXthh2vY13n7'
     secrets:
       SIGNER_PRIVATE_KEY: ${{ secrets.TESTNET_PRIVATE_KEY }}
