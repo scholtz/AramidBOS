@@ -4,7 +4,7 @@ on:
     branches: [master]
 jobs:
   deploy-testnet:
-    uses: FroVolod/bos-cli-rs/.github/workflows/deploy-testnet.yml@master
+    uses: scholtz/bos-cli-rs/.github/workflows/deploy-testnet.yml@master
     with:
       deploy-account-address: ${{ secrets.TESTNET_ADDRESS }}
       signer-account-address: ${{ secrets.TESTNET_ADDRESS }}
