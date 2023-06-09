@@ -7,9 +7,13 @@ initState({
   tokenToId,
   addressTo,
   addressFrom,
-  amount: 1,
+  amount: 0,
+  amountUint: 0,
   feeAmount: 0,
   destinationAmount,
+  amountFormatted: '',
+  feeAmountFormatted: '',
+  destinationAmountFormatted: '',
   reciever,
   inSetup: true,
   inReview: false,
@@ -95,12 +99,43 @@ const onChangeAddressTo = address => {
 };
 
 const onChangeAmount = amount => {
-  const amountUint = Math.round(amount * 10 ** state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].sourceDecimals);
-  const feeConfig = state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].feeAlternatives.find(f => f.minimumAmount >= amountUint);
-  const fee = Math.round(amountUint * sourcePercent);
-  State.update({
-    amount: amount,
-  });
+  try {
+    console.log('onChangeAmount', amount);
+    const bigAmount = Big(amount);
+    console.log('bigAmount', bigAmount);
+    const amountUint = bigAmount.times(Big(10).pow(state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].sourceDecimals)).toFixed(0);
+    console.log('amountUint', amountUint);
+
+    const feeConfig = state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].feeAlternatives.find(f => f.minimumAmount <= Big(amountUint).toNumber());
+
+    console.log('feeConfig', feeConfig, state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].feeAlternatives);
+    const fee = Big(amountUint).times(Big(feeConfig.sourcePercent)).toFixed(0);
+    console.log('fee', fee);
+    const destinationAmount = Big(amountUint)
+      .minus(fee)
+      .times(Big(10).pow(state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].destinationDecimals))
+      .div(Big(10).pow(state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].sourceDecimals))
+      .toFixed(0);
+    console.log('destinationAmount', destinationAmount);
+
+    State.update({
+      amount: amount,
+      amountUint: amountUint,
+      feeAmount: fee,
+      destinationAmount: destinationAmount,
+      amountFormatted: Big(amountUint)
+        .div(Big(10).pow(state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].sourceDecimals))
+        .toFixed(state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].sourceDecimals),
+      feeAmountFormatted: Big(fee)
+        .div(Big(10).pow(state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].sourceDecimals))
+        .toFixed(state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].sourceDecimals),
+      destinationAmountFormatted: Big(destinationAmount)
+        .div(Big(10).pow(state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].destinationDecimals))
+        .toFixed(state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].destinationDecimals),
+    });
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const onClickReview = () => {
@@ -300,7 +335,7 @@ return (
             {state.addressTo && (
               <>
                 <h2>Select amount how much you want to bridge</h2>
-                <input type="number" class="form-control" onChange={e => onChangeAmount(e.target.value)} placeholder="Please select how much you want to bridge" />
+                <input type="number" class="form-control" value={state.amount} onChange={e => onChangeAmount(e.target.value)} placeholder="Please select how much you want to bridge" />
               </>
             )}
             {state.amount > 0 && (
@@ -326,9 +361,9 @@ return (
             <div>
               From token: {state.config.chains[state.chainFromId].tokens[state.tokenFromId].name} ({state.tokenFromId})
             </div>
-            <div>Transfer amount: {state.amount}</div>
-            <div>Fees amount: {state.feeAmount}</div>
-            <div>Destination amount: {state.destinationAmount}</div>
+            <div>Transfer amount: {state.amountFormatted}</div>
+            <div>Fees amount: {state.feeAmountFormatted}</div>
+            <div>Destination amount: {state.destinationAmountFormatted}</div>
             <div>
               Destination token: {state.config.chains[state.chainToId].tokens[state.tokenToId].name} ({state.tokenToId})
             </div>
@@ -343,5 +378,6 @@ return (
         )}
       </>
     )}
+    <div class="alert alert-danger my-5">THIS IS EXPERIMENTAL WEBSITE, PROCEED WITH CAUTION</div>
   </div>
 );
