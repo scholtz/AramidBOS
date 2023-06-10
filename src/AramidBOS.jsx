@@ -1,3 +1,9 @@
+const Wrapper = styled.div`
+  .body {
+    background-image: url("background.png");
+  }
+`;
+
 initState({
   ipfsHash: null,
   config: null,
@@ -299,7 +305,7 @@ const algoPaymentQRCodeLink = () => {
   return ret;
 };
 return (
-  <div>
+  <div class="body">
     {getConfig()}
     {!(state.config && state.config.addresses && state.config.addresses.proofs) ? (
       <>
