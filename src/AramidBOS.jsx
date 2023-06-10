@@ -33,7 +33,7 @@ const Wrapper = styled.div`
     align-items: right;
     flex-direction: column;
     border: 1px solid red;
-    margin-left: auto;
+    margin-right: auto;
     width: 600px;
     }
 
