@@ -34,9 +34,9 @@ const Wrapper = styled.div`
     flex-direction: column;
     border: 1px solid red;
     margin-right: auto;
-    width: 600px;
-    }
-
+    width: 30%;
+  }
+  
   .btn {
     align-items: center;
     background-image: linear-gradient(144deg,#AF40FF, #5B42F3 50%,#00DDEB);
