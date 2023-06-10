@@ -5,9 +5,8 @@ const Wrapper = styled.div`
     justify-items: center;
     color: white;
     font-size: 20px;
-    margin-top: 50px;
+    padding-top: 50px;
     grid-template-columns: 500px 600px;
-    margin: 0 100px 0 100px;
     justify-content: center;
     margin-top: 50px;
     row-gap: 10px;
@@ -27,16 +26,21 @@ const Wrapper = styled.div`
     font-weight: bold;
     }
 
-  .alert alert-danger my-5 {
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    justify-items: center;
-    width: 400px;
+    .alert{
+      text-align: center; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      border: 1px solid red;
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
     }
 
 
 `;
+
 
 initState({
   ipfsHash: null,
