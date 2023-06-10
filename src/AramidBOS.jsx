@@ -1,7 +1,19 @@
 const Wrapper = styled.div`
   .body {
-    background-image: url('background.png');
+    background-image: url("background.png");
+    display: grid;
+    justify-items: center;
   }
+
+  .form-control {
+    gisplay: grid;
+    justify-items: center;
+    width: 200px;
+    text-align: center;
+    background-color:
+  }
+
+  
 `;
 
 initState({
