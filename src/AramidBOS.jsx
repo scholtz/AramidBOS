@@ -27,11 +27,14 @@ const Wrapper = styled.div`
     }
 
   .alert{
-    position: relative;
-    float: right;
+    text-align: center; 
+    display: flex;
+    justify-content: right;
+    align-items: right;
+    flex-direction: column;
     border: 1px solid red;
     margin-left: auto;
-    width: 30%;
+    width: 600px;
     }
 
   .btn {
