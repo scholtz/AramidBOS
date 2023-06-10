@@ -27,11 +27,8 @@ const Wrapper = styled.div`
     }
 
   .alert{
-    text-align: center; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    position: relative;
+    float: right;
     border: 1px solid red;
     margin-left: auto;
     margin-right: auto;
