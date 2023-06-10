@@ -1,12 +1,12 @@
 initState({
   ipfsHash: null,
   config: null,
-  chainFromId,
-  chainToId,
-  tokenFromId,
-  tokenToId,
-  addressTo,
-  addressFrom,
+  chainFromId: 101001,
+  chainToId: 101001,
+  tokenFromId: 37074699,
+  tokenToId: 76238324,
+  addressTo: 'TESTNTTTJDHIF5PJZUBTTDYYSKLCLM6KXCTWIOOTZJX5HO7263DPPMM2SU',
+  addressFrom: 'TESTNTTTJDHIF5PJZUBTTDYYSKLCLM6KXCTWIOOTZJX5HO7263DPPMM2SU',
   amount: 0,
   amountUint: 0,
   feeAmount: 0,
@@ -17,6 +17,7 @@ initState({
   reciever,
   inSetup: true,
   inReview: false,
+  inPayment: false,
   inClaim: false,
 });
 
@@ -116,6 +117,7 @@ const onChangeAmount = amount => {
       .times(Big(10).pow(state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].destinationDecimals))
       .div(Big(10).pow(state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].sourceDecimals))
       .toFixed(0);
+
     console.log('destinationAmount', destinationAmount);
 
     State.update({
@@ -143,11 +145,16 @@ const onClickReview = () => {
     inSetup: false,
     inReview: true,
     inClaim: false,
+    inPayment: false,
   });
 };
 
 const onClickBridge = () => {
-  // do payment
+  State.update({
+    inSetup: false,
+    inReview: false,
+    inClaim: false,
+  });
 };
 
 const onClickReviewBack = () => {
@@ -255,7 +262,29 @@ const submitNearTx = async () => {
     });
   }
 };
-
+const algoPaymentQRCodeLink = () => {
+  const payTo = state.config.chains[state.chainFromId].address;
+  const amount = state.amountUint;
+  let asset = '';
+  if (state.tokenFromId > 0) {
+    asset = '%26asset%3D' + state.tokenFromId;
+  }
+  var obj = {
+    destinationNetwork: state.chainToId.toString(),
+    destinationAddress: state.addressTo.toString(),
+    destinationToken: state.tokenToId.toString(),
+    feeAmount: state.feeAmount.toString(),
+    sourceAmount: state.destinationAmount.toString(),
+    destinationAmount: state.destinationAmount.toString(),
+    note: 'BOS',
+  };
+  let note = 'xnote%3Daramid-transfer/v1:j' + JSON.stringify(obj);
+  note = note.replace('/', '%2F');
+  const code = `algorand%3A%2F%2F${payTo}%3Famount%3D${amount}${asset}%26${note}`;
+  const ret = 'https://qrickit.com/api/qr.php?t=p&addtext=&txtcolor=000000&fgdcolor=000000&bgdcolor=FFFFFF&qrsize=300&d=' + code;
+  console.log('qrcode', ret);
+  return ret;
+};
 return (
   <div>
     {getConfig()}
@@ -371,8 +400,24 @@ return (
             <div>
               Destination chain: {state.config.chains[state.chainToId].name} ({state.chainToId})
             </div>
+            <div>state.chainFromId {state.chainFromId}</div>
+            {state.chainFromId >= '101001' && state.chainFromId <= '101003' && (
+              <>
+                <h3>Pay with QR code</h3>
+
+                <iframe width="400" height="400" src={algoPaymentQRCodeLink()} frameborder="0" style={{ width: '400px', height: '400px' }}></iframe>
+              </>
+            )}
             <button class="btn btn-primary my-2" onClick={() => onClickBridge()}>
               Proceed with bridging
+            </button>
+          </>
+        )}
+        {state.inPayment && (
+          <>
+            <h2>Bridging is in progress</h2>
+            <button class="btn btn-light m-2 float-end" onClick={() => onClickReviewBack()}>
+              Go back
             </button>
           </>
         )}
