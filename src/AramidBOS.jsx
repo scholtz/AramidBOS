@@ -3,8 +3,14 @@ const Wrapper = styled.div`
     background-image: url("https://raw.githubusercontent.com/scholtz/AramidBOS/dda67e4af240c773135e0a284d6f4846ba4d72b4/src/Background.png");
     display: grid;
     justify-items: center;
-    color: white;
+    color: black;
     font-size: 20px;
+    margin-top: 50px;
+    grid-template-columns: 500px 600px;
+    margin: 0 100px 0 100px;
+    justify-content: center;
+    margin-top: 50px;
+    row-gap: 10px;
   }
 
   h2 {
@@ -15,12 +21,19 @@ const Wrapper = styled.div`
   .form-control {
     gisplay: grid;
     justify-items: center;
-    width: 300px;
+    width: 500px;
     text-align: center;
     font-size: 14px;
     font-weight: bold;
     }
 
+  .alert alert-danger my-5 {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    width: 400px;
+    }
 
 
 `;
