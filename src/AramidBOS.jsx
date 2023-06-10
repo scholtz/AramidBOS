@@ -5,7 +5,6 @@ const Wrapper = styled.div`
     justify-items: center;
     color: white;
     font-size: 20px;
-    padding-top: 120px;
     justify-content: center;
     row-gap: 0px;
   }
@@ -23,6 +22,10 @@ const Wrapper = styled.div`
     text-align: center;
     font-size: 14px;
     font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    background: rgba(76, 175, 80, 0.2);
+    color: white;
     }
 
   .alert{
@@ -34,10 +37,11 @@ const Wrapper = styled.div`
     border: 1px solid red;
     margin-right: auto;
     margin-left: auto;
-    width: 600px;
+    width: 30%;
     }
 
   .btn {
+    padding-top: 20px;
     align-items: center;
     background-image: linear-gradient(144deg,#AF40FF, #5B42F3 50%,#00DDEB);
     border: 0;
@@ -50,9 +54,8 @@ const Wrapper = styled.div`
     font-size: 20px;
     justify-content: center;
     line-height: 1em;
-    max-width: 100px;
-    min-width: 240px;
-    height: 40px
+    max-width: 280px;
+    min-width: 140px;
     padding: 3px;
     text-decoration: none;
     user-select: none;
@@ -80,6 +83,18 @@ const Wrapper = styled.div`
     background: none;
   }
 
+  .main-header {
+    padding-top: 20px;
+    font-size: 36px;
+  }
+
+  option {
+    color: white;
+  }
+
+  .second-header {
+    padding-top: 50px;
+  }
 `;
 
 initState({
@@ -395,7 +410,8 @@ return (
         <>
           {state.inSetup && (
             <>
-              <h2>Bridge your assets. Select source chain</h2>
+              <h2 className="main-header">Bridge your assets</h2>
+              <h2>Select source chain</h2>
               <select class="form-control" value={state.chainFromId} onChange={e => onChangeChainFrom(e.target.value)}>
                 <option value="" selected disabled>
                   Please select chain
