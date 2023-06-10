@@ -31,8 +31,7 @@ const Wrapper = styled.div`
     float: right;
     border: 1px solid red;
     margin-left: auto;
-    margin-right: auto;
-    width: 50%;
+    width: 30%;
     }
 
   .btn {
