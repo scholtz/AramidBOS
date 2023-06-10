@@ -5,16 +5,15 @@ const Wrapper = styled.div`
     justify-items: center;
     color: white;
     font-size: 20px;
-    padding-top: 50px;
-    grid-template-columns: 500px 600px;
+    padding-top: 120px;
     justify-content: center;
-    margin-top: 50px;
-    row-gap: 10px;
+    row-gap: 0px;
   }
 
   h2 {
     font-size: 20px;
     font-weight: bold;
+    padding-top: 30px;
   }
 
   .form-control {
@@ -33,9 +32,10 @@ const Wrapper = styled.div`
     align-items: right;
     flex-direction: column;
     border: 1px solid red;
+    margin-right: auto;
     margin-left: auto;
-    width: 500px;
-  }
+    width: 30%;
+    }
 
   .btn {
     align-items: center;
@@ -52,7 +52,6 @@ const Wrapper = styled.div`
     line-height: 1em;
     max-width: 100px;
     min-width: 140px;
-    max-height: 50px;
     padding: 3px;
     text-decoration: none;
     user-select: none;
