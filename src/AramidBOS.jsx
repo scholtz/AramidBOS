@@ -1,3 +1,9 @@
+const Wrapper = styled.div`
+  .body {
+    background-image: url('background.png');
+  }
+`;
+
 initState({
   ipfsHash: null,
   config: null,
@@ -300,149 +306,151 @@ const algoPaymentQRCodeLink = () => {
   return ret;
 };
 return (
-  <div>
-    {getConfig()}
-    {!(state.config && state.config.addresses && state.config.addresses.proofs) ? (
-      <>
-        <div class="spinner-border" role="status"></div>
-      </>
-    ) : (
-      <>
-        {state.inSetup && (
-          <>
-            <h2>Bridge your assets. Select source chain</h2>
-            <select class="form-control" value={state.chainFromId} onChange={e => onChangeChainFrom(e.target.value)}>
-              <option value="" selected disabled>
-                Please select chain
-              </option>
-              {Object.keys(state.config.chains).map(chainId => (
-                <option value={chainId}>{state.config.chains[chainId].name}</option>
-              ))}
-            </select>
-            {state.chainFromId && (
-              <>
-                <h2>Select destination chain</h2>
-                <select class="form-control" value={state.chainToId} onChange={e => onChangeChainTo(e.target.value)}>
-                  <option value="" selected disabled>
-                    Please select chain
-                  </option>
-                  {Object.keys(state.config.chains2tokens[state.chainFromId]).map(chainId => (
-                    <option value={chainId}>{state.config.chains[chainId].name}</option>
-                  ))}
-                </select>
-              </>
-            )}
+  <Wrapper>
+    <div className="body">
+      {getConfig()}
+      {!(state.config && state.config.addresses && state.config.addresses.proofs) ? (
+        <>
+          <div class="spinner-border" role="status"></div>
+        </>
+      ) : (
+        <>
+          {state.inSetup && (
+            <>
+              <h2>Bridge your assets. Select source chain</h2>
+              <select class="form-control" value={state.chainFromId} onChange={e => onChangeChainFrom(e.target.value)}>
+                <option value="" selected disabled>
+                  Please select chain
+                </option>
+                {Object.keys(state.config.chains).map(chainId => (
+                  <option value={chainId}>{state.config.chains[chainId].name}</option>
+                ))}
+              </select>
+              {state.chainFromId && (
+                <>
+                  <h2>Select destination chain</h2>
+                  <select class="form-control" value={state.chainToId} onChange={e => onChangeChainTo(e.target.value)}>
+                    <option value="" selected disabled>
+                      Please select chain
+                    </option>
+                    {Object.keys(state.config.chains2tokens[state.chainFromId]).map(chainId => (
+                      <option value={chainId}>{state.config.chains[chainId].name}</option>
+                    ))}
+                  </select>
+                </>
+              )}
 
-            {state.chainToId && (
-              <>
-                <h2>Select source token</h2>
-                <select class="form-control" value={state.tokenFromId} onChange={e => onChangeTokenFrom(e.target.value)}>
-                  <option value="" selected disabled>
-                    Please select source token
-                  </option>
-                  {Object.keys(state.config.chains2tokens[state.chainFromId][state.chainToId]).map(tokenId => (
-                    <option value={tokenId}>{state.config.chains[state.chainFromId].tokens[tokenId].name}</option>
-                  ))}
-                </select>
-              </>
-            )}
+              {state.chainToId && (
+                <>
+                  <h2>Select source token</h2>
+                  <select class="form-control" value={state.tokenFromId} onChange={e => onChangeTokenFrom(e.target.value)}>
+                    <option value="" selected disabled>
+                      Please select source token
+                    </option>
+                    {Object.keys(state.config.chains2tokens[state.chainFromId][state.chainToId]).map(tokenId => (
+                      <option value={tokenId}>{state.config.chains[state.chainFromId].tokens[tokenId].name}</option>
+                    ))}
+                  </select>
+                </>
+              )}
 
-            {state.tokenFromId && (
-              <>
-                <h2>Select destination token</h2>
-                <select class="form-control" value={state.tokenToId} onChange={e => onChangeTokenTo(e.target.value)}>
-                  <option value="" selected disabled>
-                    Please select destination token
-                  </option>
-                  {Object.keys(state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId]).map(tokenId => (
-                    <option value={tokenId}>{state.config.chains[state.chainToId].tokens[tokenId].name}</option>
-                  ))}
-                </select>
-              </>
-            )}
+              {state.tokenFromId && (
+                <>
+                  <h2>Select destination token</h2>
+                  <select class="form-control" value={state.tokenToId} onChange={e => onChangeTokenTo(e.target.value)}>
+                    <option value="" selected disabled>
+                      Please select destination token
+                    </option>
+                    {Object.keys(state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId]).map(tokenId => (
+                      <option value={tokenId}>{state.config.chains[state.chainToId].tokens[tokenId].name}</option>
+                    ))}
+                  </select>
+                </>
+              )}
 
-            {state.tokenToId && (
-              <>
-                <h2>Select sender address</h2>
-                <input class="form-control" value={state.addressFrom} onChange={e => onChangeAddressFrom(e.target.value)} placeholder="Please select sender address" />
-              </>
-            )}
+              {state.tokenToId && (
+                <>
+                  <h2>Select sender address</h2>
+                  <input class="form-control" value={state.addressFrom} onChange={e => onChangeAddressFrom(e.target.value)} placeholder="Please select sender address" />
+                </>
+              )}
 
-            {state.addressFrom && (
-              <>
-                <h2>Select address where you want to bridge to</h2>
-                <input class="form-control" value={state.addressTo} onChange={e => onChangeAddressTo(e.target.value)} placeholder="Please select receiver address" />
-              </>
-            )}
+              {state.addressFrom && (
+                <>
+                  <h2>Select address where you want to bridge to</h2>
+                  <input class="form-control" value={state.addressTo} onChange={e => onChangeAddressTo(e.target.value)} placeholder="Please select receiver address" />
+                </>
+              )}
 
-            {state.addressTo && (
-              <>
-                <h2>Select amount how much you want to bridge</h2>
-                <input type="number" class="form-control" value={state.amount} onChange={e => onChangeAmount(e.target.value)} placeholder="Please select how much you want to bridge" />
-              </>
-            )}
-            {state.amount > 0 && (
-              <>
-                <button class="btn btn-primary my-2" onClick={() => onClickReview()}>
-                  Review transfer
-                </button>
-              </>
-            )}
-          </>
-        )}
-        {state.inReview && (
-          <>
-            <h2>Review transaction before bridging</h2>
-            <button class="btn btn-light m-2 float-end" onClick={() => onClickReviewBack()}>
-              Go back
-            </button>
+              {state.addressTo && (
+                <>
+                  <h2>Select amount how much you want to bridge</h2>
+                  <input type="number" class="form-control" value={state.amount} onChange={e => onChangeAmount(e.target.value)} placeholder="Please select how much you want to bridge" />
+                </>
+              )}
+              {state.amount > 0 && (
+                <>
+                  <button class="btn btn-primary my-2" onClick={() => onClickReview()}>
+                    Review transfer
+                  </button>
+                </>
+              )}
+            </>
+          )}
+          {state.inReview && (
+            <>
+              <h2>Review transaction before bridging</h2>
+              <button class="btn btn-light m-2 float-end" onClick={() => onClickReviewBack()}>
+                Go back
+              </button>
 
-            <div>
-              From chain: {state.config.chains[state.chainFromId].name} ({state.chainFromId})
-            </div>
-            <div>
-              {state.config.chains[state.chainFromId].name} Bridge address: {state.config.chains[state.chainToId].address}
-            </div>
-            <div>From account: {state.addressFrom}</div>
-            <div>
-              From token: {state.config.chains[state.chainFromId].tokens[state.tokenFromId].name} ({state.tokenFromId})
-            </div>
-            <div>Transfer amount: {state.amountFormatted}</div>
-            <div>Fees amount: {state.feeAmountFormatted}</div>
-            <div>Destination amount: {state.destinationAmountFormatted}</div>
-            <div>
-              Destination token: {state.config.chains[state.chainToId].tokens[state.tokenToId].name} ({state.tokenToId})
-            </div>
-            <div>Destination account: {state.addressTo}</div>
-            <div>
-              Destination chain: {state.config.chains[state.chainToId].name} ({state.chainToId})
-            </div>
-            <div>
-              {state.config.chains[state.chainToId].name} bridge address: {state.config.chains[state.chainToId].address}
-            </div>
+              <div>
+                From chain: {state.config.chains[state.chainFromId].name} ({state.chainFromId})
+              </div>
+              <div>
+                {state.config.chains[state.chainFromId].name} Bridge address: {state.config.chains[state.chainToId].address}
+              </div>
+              <div>From account: {state.addressFrom}</div>
+              <div>
+                From token: {state.config.chains[state.chainFromId].tokens[state.tokenFromId].name} ({state.tokenFromId})
+              </div>
+              <div>Transfer amount: {state.amountFormatted}</div>
+              <div>Fees amount: {state.feeAmountFormatted}</div>
+              <div>Destination amount: {state.destinationAmountFormatted}</div>
+              <div>
+                Destination token: {state.config.chains[state.chainToId].tokens[state.tokenToId].name} ({state.tokenToId})
+              </div>
+              <div>Destination account: {state.addressTo}</div>
+              <div>
+                Destination chain: {state.config.chains[state.chainToId].name} ({state.chainToId})
+              </div>
+              <div>
+                {state.config.chains[state.chainToId].name} bridge address: {state.config.chains[state.chainToId].address}
+              </div>
 
-            {state.chainFromId >= '101001' && state.chainFromId <= '101003' && (
-              <>
-                <h3>Pay with QR code</h3>
+              {state.chainFromId >= '101001' && state.chainFromId <= '101003' && (
+                <>
+                  <h3>Pay with QR code</h3>
 
-                <iframe width="400" height="400" src={algoPaymentQRCodeLink()} frameborder="0" style={{ width: '400px', height: '400px' }}></iframe>
-              </>
-            )}
-            <button class="btn btn-primary my-2" onClick={() => onClickBridge()}>
-              Proceed with bridging
-            </button>
-          </>
-        )}
-        {state.inPayment && (
-          <>
-            <h2>Bridging is in progress</h2>
-            <button class="btn btn-light m-2 float-end" onClick={() => onClickReviewBack()}>
-              Go back
-            </button>
-          </>
-        )}
-      </>
-    )}
-    <div class="alert alert-danger my-5">THIS IS EXPERIMENTAL WEBSITE, PROCEED WITH CAUTION</div>
-  </div>
+                  <iframe width="400" height="400" src={algoPaymentQRCodeLink()} frameborder="0" style={{ width: '400px', height: '400px' }}></iframe>
+                </>
+              )}
+              <button class="btn btn-primary my-2" onClick={() => onClickBridge()}>
+                Proceed with bridging
+              </button>
+            </>
+          )}
+          {state.inPayment && (
+            <>
+              <h2>Bridging is in progress</h2>
+              <button class="btn btn-light m-2 float-end" onClick={() => onClickReviewBack()}>
+                Go back
+              </button>
+            </>
+          )}
+        </>
+      )}
+      <div class="alert alert-danger my-5">THIS IS EXPERIMENTAL WEBSITE, PROCEED WITH CAUTION</div>
+    </div>
+  </Wrapper>
 );
