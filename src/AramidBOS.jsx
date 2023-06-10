@@ -1,17 +1,25 @@
 const Wrapper = styled.div`
   .body {
-    background-image: url("https://raw.githubusercontent.com/scholtz/AramidBOS/dda67e4af240c773135e0a284d6f4846ba4d72b4/src/Background.png");
+    background-image: url("background.png");
     display: grid;
     justify-items: center;
+    color: black;
+    font-size: 20px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: bold;
   }
 
   .form-control {
     gisplay: grid;
     justify-items: center;
-    width: 200px;
+    width: 300px;
     text-align: center;
-    background-color:
-  }
+    font-size: 14px;
+    font-weight: bold;
+    }
 
 
 `;
