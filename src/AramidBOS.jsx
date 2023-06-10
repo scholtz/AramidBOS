@@ -9,6 +9,7 @@ initState({
   addressFrom: 'scholtz.testnet',
   amount: 0,
   amountUint: 0,
+  rootAmount: 0,
   feeAmount: 0,
   destinationAmount,
   amountFormatted: '',
@@ -112,17 +113,17 @@ const onChangeAmount = amount => {
     console.log('feeConfig', feeConfig, state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].feeAlternatives);
     const fee = Big(amountUint).times(Big(feeConfig.sourcePercent)).toFixed(0);
     console.log('fee', fee);
-    const destinationAmount = Big(amountUint)
-      .minus(fee)
+    const rootAmount = Big(amountUint).minus(Big(fee)).toFixed(0);
+    const destinationAmount = Big(rootAmount)
       .times(Big(10).pow(state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].destinationDecimals))
       .div(Big(10).pow(state.config.chains2tokens[state.chainFromId][state.chainToId][state.tokenFromId][state.tokenToId].sourceDecimals))
       .toFixed(0);
 
     console.log('destinationAmount', destinationAmount);
-
     State.update({
       amount: amount,
       amountUint: amountUint,
+      rootAmount: rootAmount,
       feeAmount: fee,
       destinationAmount: destinationAmount,
       amountFormatted: Big(amountUint)
@@ -224,7 +225,7 @@ const submitNearTx = () => {
         fee_token_id: state.tokenFromId.toString(),
         note: 'BOS',
         payment_type: 'SameTokenPayment',
-        root_amount: state.amountUint.toString(),
+        root_amount: state.rootAmount.toString(),
         root_token_id: state.tokenFromId.toString(),
         sender_id: state.addressFrom.toString(),
       },
@@ -260,7 +261,7 @@ const submitNearTx = () => {
       input: {
         fee_token_id: '0000000000000000000000000000000000000000000000000000000000000000',
         fee_amount: state.feeAmount,
-        root_amount: state.amountUint,
+        root_amount: rootAmount,
         destination_chain_data: {
           chain_id: state.chainToId,
           token_address: state.tokenToId,
