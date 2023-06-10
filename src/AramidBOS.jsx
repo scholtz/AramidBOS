@@ -1,9 +1,9 @@
 const Wrapper = styled.div`
   .body {
-    background-image: url("background.png");
+    background-image: url("https://raw.githubusercontent.com/scholtz/AramidBOS/dda67e4af240c773135e0a284d6f4846ba4d72b4/src/Background.png");
     display: grid;
     justify-items: center;
-    color: black;
+    color: white;
     font-size: 20px;
   }
 
@@ -20,6 +20,7 @@ const Wrapper = styled.div`
     font-size: 14px;
     font-weight: bold;
     }
+
 
 
 `;
