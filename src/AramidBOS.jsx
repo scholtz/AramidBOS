@@ -1,12 +1,12 @@
 initState({
   ipfsHash: null,
   config: null,
-  chainFromId: 101001,
+  chainFromId: 102001,
   chainToId: 101001,
-  tokenFromId: 37074699,
+  tokenFromId: 'dev-20230308212321-87311737901740',
   tokenToId: 76238324,
   addressTo: 'TESTNTTTJDHIF5PJZUBTTDYYSKLCLM6KXCTWIOOTZJX5HO7263DPPMM2SU',
-  addressFrom: 'TESTNTTTJDHIF5PJZUBTTDYYSKLCLM6KXCTWIOOTZJX5HO7263DPPMM2SU',
+  addressFrom: 'scholtz.testnet',
   amount: 0,
   amountUint: 0,
   feeAmount: 0,
@@ -150,6 +150,12 @@ const onClickReview = () => {
 };
 
 const onClickBridge = () => {
+  if (state.chainFromId == 102001) {
+    console.log('going to bridge');
+    const tx = submitNearTx();
+    console.log('tx', tx);
+  }
+
   State.update({
     inSetup: false,
     inReview: false,
@@ -204,62 +210,69 @@ const loadIPFSConfig = () => {
   });
 };
 
-const submitNearTx = async () => {
+const submitNearTx = () => {
   if (state.tokenFromId !== '0x0000000000000000000000000000000000000000') {
     const msgData = {
       FunctionLockTokens: {
         destination_chain_data: {
-          address: state.addressTo, // TODO
-          amount: state.destinationAmount, // TODO
+          address: state.addressTo.toString(),
+          amount: state.destinationAmount.toString(),
           chain_id: state.chainToId,
-          token_address: state.tokenToId,
+          token_address: state.tokenToId.toString(),
         },
-        fee_amount: state.feeAmount,
-        fee_token_id: state.tokenFromId,
-        note: 'aramid-fe',
+        fee_amount: state.feeAmount.toString(),
+        fee_token_id: state.tokenFromId.toString(),
+        note: 'BOS',
         payment_type: 'SameTokenPayment',
-        root_amount: state.destinationAmount, // todo
-        root_token_id: state.tokenFromId,
-        sender_id: state.addressFrom, // todo
+        root_amount: state.amountUint.toString(),
+        root_token_id: state.tokenFromId.toString(),
+        sender_id: state.addressFrom.toString(),
       },
     };
-
-    const tx = await appData.nearWallet?.callMethod({
-      method: 'ft_transfer_call',
-      args: {
-        receiver_id: CONTRACT_ADDRESS(ENV, appData?.publicConfiguration),
-        amount: appData.sourceAmount,
+    // Near.call(contractName, methodName, args, [deposit=0], [gas=300Tg])
+    console.log('call near', [
+      state.tokenFromId,
+      'ft_transfer_call',
+      {
+        receiver_id: state.config.chains[state.chainFromId].address,
+        amount: state.amountUint,
         memo: null,
         msg: JSON.stringify(msgData),
       },
-      contractId: appData.sourceTokenConfiguration.tokenId,
-      deposit: '1',
-      gas: '75000000000000',
-    });
+      300_000_000_000_000,
+      1,
+    ]);
+    return Near.call(
+      state.tokenFromId,
+      'ft_transfer_call',
+      {
+        receiver_id: state.config.chains[state.chainFromId].address,
+        amount: state.amountUint,
+        memo: null,
+        msg: JSON.stringify(msgData),
+      },
+      300_000_000_000_000,
+      1
+    );
     // console.log('file: Review.tsx:714  submitNearTx  tx:', tx);
   } else {
     const msgData = {
       input: {
         fee_token_id: '0000000000000000000000000000000000000000000000000000000000000000',
-        fee_amount: appData.feeAmount,
-        root_amount: new BigNumber(appData.sourceAmount).minus(appData.feeAmount).toNumber().toLocaleString('fullwide', { useGrouping: false }),
+        fee_amount: state.feeAmount,
+        root_amount: state.amountUint,
         destination_chain_data: {
-          chain_id: appData.destinationTokenConfiguration.chainId,
-          token_address: appData.destinationTokenConfiguration.tokenId,
-          amount: appData?.destinationAmount,
-          address: appData.destinationAddress,
+          chain_id: state.chainToId,
+          token_address: state.tokenToId,
+          amount: state.destinationAmount,
+          address: state.addressTo,
         },
-        note: 'aramid-fe',
+        note: 'BOS',
         payment_type: 'SameTokenPayment',
       },
     };
-    const tx = await appData.nearWallet?.callMethod({
-      method: 'lock_native_currency',
-      args: msgData,
-      contractId: CONTRACT_ADDRESS(appData?.appConfiguration?.environment, appData?.publicConfiguration),
-      deposit: '1',
-      gas: '75000000000000',
-    });
+    console.log('call near', [state.config.chains[state.chainToId].address, 'lock_native_currency', msgData, 1, 75000000000000]);
+    return Near.call(state.config.chains[state.chainToId].address, 'lock_native_currency', msgData, 1, 75000000000000);
   }
 };
 const algoPaymentQRCodeLink = () => {
@@ -270,7 +283,7 @@ const algoPaymentQRCodeLink = () => {
     asset = '%26asset%3D' + state.tokenFromId;
   }
   var obj = {
-    destinationNetwork: state.chainToId.toString(),
+    destinationNetwork: state.chainToId,
     destinationAddress: state.addressTo.toString(),
     destinationToken: state.tokenToId.toString(),
     feeAmount: state.feeAmount.toString(),
@@ -386,6 +399,9 @@ return (
             <div>
               From chain: {state.config.chains[state.chainFromId].name} ({state.chainFromId})
             </div>
+            <div>
+              {state.config.chains[state.chainFromId].name} Bridge address: {state.config.chains[state.chainToId].address}
+            </div>
             <div>From account: {state.addressFrom}</div>
             <div>
               From token: {state.config.chains[state.chainFromId].tokens[state.tokenFromId].name} ({state.tokenFromId})
@@ -400,7 +416,10 @@ return (
             <div>
               Destination chain: {state.config.chains[state.chainToId].name} ({state.chainToId})
             </div>
-            <div>state.chainFromId {state.chainFromId}</div>
+            <div>
+              {state.config.chains[state.chainToId].name} bridge address: {state.config.chains[state.chainToId].address}
+            </div>
+
             {state.chainFromId >= '101001' && state.chainFromId <= '101003' && (
               <>
                 <h3>Pay with QR code</h3>
