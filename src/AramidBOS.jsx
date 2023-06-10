@@ -3,7 +3,7 @@ const Wrapper = styled.div`
     background-image: url("https://raw.githubusercontent.com/scholtz/AramidBOS/dda67e4af240c773135e0a284d6f4846ba4d72b4/src/Background.png");
     display: grid;
     justify-items: center;
-    color: black;
+    color: white;
     font-size: 20px;
     margin-top: 50px;
     grid-template-columns: 500px 600px;
