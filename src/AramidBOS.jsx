@@ -51,7 +51,8 @@ const Wrapper = styled.div`
     justify-content: center;
     line-height: 1em;
     max-width: 100px;
-    min-width: 140px;
+    min-width: 240px;
+    height: 40px
     padding: 3px;
     text-decoration: none;
     user-select: none;
