@@ -1,6 +1,6 @@
 const Wrapper = styled.div`
   .body {
-    background-image: url("https://raw.githubusercontent.com/scholtz/AramidBOS/dda67e4af240c773135e0a284d6f4846ba4d72b4/src/Background.png");
+    background-image: url('https://raw.githubusercontent.com/scholtz/AramidBOS/dda67e4af240c773135e0a284d6f4846ba4d72b4/src/Background.png');
     display: grid;
     justify-items: center;
     color: white;
@@ -26,10 +26,10 @@ const Wrapper = styled.div`
     border-radius: 20px;
     background: rgba(76, 175, 80, 0.2);
     color: white;
-    }
+  }
 
-  .alert{
-    text-align: center; 
+  .alert {
+    text-align: center;
     display: flex;
     justify-content: right;
     align-items: right;
@@ -38,17 +38,17 @@ const Wrapper = styled.div`
     margin-right: auto;
     margin-left: auto;
     width: 600px;
-    }
+  }
 
   .btn {
     padding-top: 20px;
     align-items: center;
-    background-image: linear-gradient(144deg,#AF40FF, #5B42F3 50%,#00DDEB);
+    background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
     border: 0;
     border-radius: 8px;
     box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
     box-sizing: border-box;
-    color: #FFFFFF;
+    color: #ffffff;
     display: flex;
     font-family: Phantomsans, sans-serif;
     font-size: 20px;
@@ -63,8 +63,8 @@ const Wrapper = styled.div`
     touch-action: manipulation;
     white-space: nowrap;
     cursor: pointer;
-    } 
-    
+  }
+
   .btn:active,
   .btn:hover {
     outline: 0;
@@ -89,9 +89,8 @@ const Wrapper = styled.div`
   }
 
   option {
-    color: white;
+    color: #111;
   }
-
   .second-header {
     padding-top: 50px;
   }
@@ -106,6 +105,12 @@ initState({
   tokenToId: 76238324,
   addressTo: 'TESTNTTTJDHIF5PJZUBTTDYYSKLCLM6KXCTWIOOTZJX5HO7263DPPMM2SU',
   addressFrom: 'scholtz.testnet',
+  // chainFromId: 101001,
+  // chainToId: 101001,
+  // tokenFromId: 37074699,
+  // tokenToId: 76238324,
+  // addressTo: 'TESTNTTTJDHIF5PJZUBTTDYYSKLCLM6KXCTWIOOTZJX5HO7263DPPMM2SU',
+  // addressFrom: 'TESTNTTTJDHIF5PJZUBTTDYYSKLCLM6KXCTWIOOTZJX5HO7263DPPMM2SU',
   amount: 0,
   amountUint: 0,
   rootAmount: 0,
@@ -260,6 +265,7 @@ const onClickBridge = () => {
     inSetup: false,
     inReview: false,
     inClaim: false,
+    inPayment: true,
   });
 };
 
@@ -268,6 +274,7 @@ const onClickReviewBack = () => {
     inSetup: true,
     inReview: false,
     inClaim: false,
+    inPayment: false,
   });
 };
 const fetchConfiguration = () => {
@@ -526,7 +533,7 @@ return (
                 <>
                   <h3>Pay with QR code</h3>
 
-                  <iframe width="400" height="400" src={algoPaymentQRCodeLink()} frameborder="0" style={{ width: '400px', height: '400px' }}></iframe>
+                  <iframe width="300" height="300" src={algoPaymentQRCodeLink()} frameborder="0" style={{ width: '300px', height: '300px' }}></iframe>
                 </>
               )}
               <button class="btn btn-primary my-2" onClick={() => onClickBridge()}>
@@ -537,6 +544,13 @@ return (
           {state.inPayment && (
             <>
               <h2>Bridging is in progress</h2>
+              {state.chainFromId >= '101001' && state.chainFromId <= '101003' && (
+                <>
+                  <h3>Please pay with the QR code if you did not do it yet</h3>
+
+                  <iframe width="300" height="300" src={algoPaymentQRCodeLink()} frameborder="0" style={{ width: '300px', height: '300px' }}></iframe>
+                </>
+              )}
               <button class="btn btn-light m-2 float-end" onClick={() => onClickReviewBack()}>
                 Go back
               </button>
