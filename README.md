@@ -1,5 +1,7 @@
 # Decentralized bridge on decentralized frontend
 
+https://test.near.social/#/scholtz.testnet/widget/AramidBOS
+
 https://test.near.org/scholtz.testnet/widget/AramidBOS
 
 ## Aramid Bridge
